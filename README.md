@@ -1,7 +1,7 @@
 🎓 School Simulation System
 Secure • Scalable • Modern Spring Boot Platform
 <p align="center"> <img src="https://img.shields.io/badge/Spring_Boot-3.x-brightgreen?style=for-the-badge&logo=springboot" /> <img src="https://img.shields.io/badge/Spring_MVC-Architecture-blue?style=for-the-badge" /> <img src="https://img.shields.io/badge/PostgreSQL-Production_Ready-316192?style=for-the-badge&logo=postgresql" /> <img src="https://img.shields.io/badge/JWT-Security-red?style=for-the-badge" /> <img src="https://img.shields.io/badge/Flyway-Migrations-orange?style=for-the-badge&logo=flyway" /> <img src="https://img.shields.io/badge/Lombok-Clean_Code-green?style=for-the-badge&logo=lombok" /> </p>
-w entity objects.
+
 
 🚀 Features
 ✔ 1. User Roles (JWT Security)
