@@ -1,44 +1,40 @@
 🎓 School Simulation System
 Secure • Scalable • Modern Spring Boot Platform
 <p align="center"> <img src="https://img.shields.io/badge/Spring_Boot-3.x-brightgreen?style=for-the-badge&logo=springboot" /> <img src="https://img.shields.io/badge/Spring_MVC-Architecture-blue?style=for-the-badge" /> <img src="https://img.shields.io/badge/PostgreSQL-Production_Ready-316192?style=for-the-badge&logo=postgresql" /> <img src="https://img.shields.io/badge/JWT-Security-red?style=for-the-badge" /> <img src="https://img.shields.io/badge/Flyway-Migrations-orange?style=for-the-badge&logo=flyway" /> <img src="https://img.shields.io/badge/Lombok-Clean_Code-green?style=for-the-badge&logo=lombok" /> </p>
-🚀 Overview
+w entity objects.
 
-This project is a complete Spring Boot + Spring MVC Student Management System built with real-world standards for:
+🚀 Features
+✔ 1. User Roles (JWT Security)
 
-🔄 Clean modular separation (Entities, DTOs, Services, Repositories, Controllers)
+Admin
 
-🔐 JWT-based security & role authorization
+Can delete student and teacher accounts
 
-📦 Custom API responses
+Can view all data
 
-❗ Custom global exception handling
+Teacher
 
-🗃️ Flyway-powered SQL migrations
+Can update their own profile
 
-🧪 200+ Postman tests
+Can add grades, view students assigned to them
 
-🐘 PostgreSQL database
+Student
 
-It follows professional backend design patterns and focuses heavily on maintainability, scalability, and clarity.
+Can update their own profile
 
-🏗️ Architecture Overview
-┌─────────────────────────────────────────────┐
-│                  API Layer                   │
-│  REST Controllers → APIResponse builder      │
-├─────────────────────────────────────────────┤
-│               Service Layer                  │
-│ Business Logic | Validation | Rules          │
-├─────────────────────────────────────────────┤
-│              Repository Layer                │
-│ Spring Data JPA | PostgreSQL                 │
-├─────────────────────────────────────────────┤
-│ Entities | DTOs | Mappers | Lombok           │
-│ OneToMany, ManyToMany, etc.                  │
-└─────────────────────────────────────────────┘
+Can view their grades and related information
 
-🧩 Data Model (Entities & Relations)
+JWT secures all endpoints, and only public endpoints allow registration/login.
 
-This project contains multiple entities connected via:
+🧱 Architecture Overview
+
+The project uses a clean, maintainable structure:
+
+✔ Entities (JPA)
+
+Entities for Students, Teachers, Grades, Subjects, and more
+
+Relationships include:
 
 @OneToMany
 
@@ -46,220 +42,176 @@ This project contains multiple entities connected via:
 
 @ManyToMany
 
-Cascade behaviors
+@OneToOne (if used)
 
-Lazy/Fetch type optimizations
+Lombok reduces boilerplate (getters, setters, constructors)
 
-The domain is fully normalized, using DTOs to ensure clean, safe data exposure.
+✔ DTO Layer
 
-📤 DTO Layer (Secure Data Output)
+Only safe and required data is exposed
 
-DTOs ensure that:
+Sensitive/internal fields are hidden from API consumers
 
-✔ Only required data is returned
-✔ Internal relations & sensitive fields stay hidden
-✔ Response bodies remain lightweight
+✔ Controllers & RestControllers
 
-Every controller outputs APIResponse<T> instead of raw entity objects.
+Split logically to maintain clean responsibilities
 
-📬 Custom APIResponse Class (Unified Response Format)
+Responses standardized using ApiResponse (see section below)
 
-All controller responses go through a centralized custom response class, improving:
+✔ Services & Interfaces
 
-API consistency
+Every service has a corresponding interface → easier maintenance & testing
 
-Error readability
+Business logic stays in service layer
 
-Client-side integration
+✔ Repository Layer
 
-✔ Example APIResponse format:
-{
-  "success": true,
-  "message": "Student created successfully",
-  "data": {
-    "id": 12,
-    "name": "John Doe"
-  },
-  "timestamp": "2025-01-22T15:01:32"
-}
+Uses Spring Data JPA
 
+Clean, readable database interactions
 
-Features in APIResponse:
+🗃️ Database (PostgreSQL + Flyway)
+✔ Flyway Migration
 
-success boolean
+Schema and test data managed through versioned migrations
 
-message field for user-friendly explanation
+Ensures consistent database setup across environments
 
-generic data object
+Clean version control of database structure
 
-timestamp for debugging
+✔ PostgreSQL
 
-❗ Custom Exception System
+Reliable and widely used relational database
 
-The application includes a dedicated global exception layer powered by:
+The project was tested using:
 
-✔ NotFoundException
-
-Thrown when an entity does not exist.
-
-✔ AlreadyExistsException
-
-Used when attempting to create an already existing entity.
-
-✔ GlobalExceptionHandler
-
-A Spring @ControllerAdvice class that:
-
-Catches all exceptions
-
-Returns a formatted APIResponse
-
-Converts technical errors into user-friendly messages
-
-Avoids exposing sensitive backend stack traces
-
-✔ Example error response:
-{
-  "success": false,
-  "message": "Student with ID 45 not found",
-  "timestamp": "2025-01-22T12:15:21"
-}
-
-🔐 Security Layer (JWT)
-
-Security is fully handled using:
-
-✔ Login / Register endpoints
-
-Generate a JWT upon successful authentication.
-
-✔ Role-based authorization
-
-Admin
-
-Manage all students and teachers
-
-Delete accounts
-
-Teacher
-
-Update own profile
-
-Add grades to students
-
-Student
-
-Update only own data
-
-View only personal info
-
-✔ JWT validation includes:
-
-Token expiration checks
-
-Signature validation
-
-Role extraction
-
-Access control per endpoint
-
-No endpoint is accessible without valid token (except login/register).
+200+ rows for fetching, inserting, updating, deleting
 
 🧪 Testing (Postman)
 
-The API is validated with 200+ Postman tests, covering:
+All endpoints were tested via Postman
 
-Authentication
+Tests include:
 
-DTO correctness
+Valid requests
 
-Permissions by role
+Error states
 
-Exception handling
+Authorization failures
 
-Token expiration
+Wrong credentials
 
-CRUD operations
+Validation cases
 
-Data integrity
+❗ Custom Exception Handling (Verified Against Code)
 
-🐘 Database (PostgreSQL + Flyway)
-✔ PostgreSQL is used for:
+You use a global exception system to produce user-friendly, descriptive messages.
 
-High performance
+Your custom exceptions include:
 
-Real relational modeling
+NotFoundException
 
-Safe transaction handling
+AlreadyExistsException
 
-✔ Flyway migration files include:
+GlobalException
 
-Table creation
+others (as needed)
 
-Constraints
+These exceptions are processed by a central handler that converts them into a unified API response format (see next section).
 
-Seed data
+📦 Custom API Response System (Verified with Your Real Code)
 
-Schema evolution
+Your project uses a fully custom and standardized response wrapper:
 
-Example structure:
+✔ Class: ccpetrov01.studentApp.responses.ApiResponse<T>
+✔ Structure:
+{
+  "success": true/false,
+  "message": "Text message",
+  "data": { ... object or list ... },
+  "errors": [ "error1", "error2" ]
+}
 
-src/main/resources/db/migration/
- ├─ V1__create_students.sql
- ├─ V2__create_teachers.sql
- ├─ V3__relations.sql
- ├─ V4__grades.sql
+✔ Fields (from your real class):
 
-▶️ Running the Project
-1. Create the database:
-CREATE DATABASE student_app;
+boolean success
 
-2. Configure application.properties:
-spring.datasource.url=jdbc:postgresql://localhost:5432/student_app
-spring.datasource.username=postgres
-spring.datasource.password=yourpassword
+String message
 
-spring.jpa.hibernate.ddl-auto=validate
-spring.jpa.show-sql=true
+T data
 
-3. Start the project:
-mvn spring-boot:run
+List<String> errors
 
-📡 Example API Endpoints
-🔑 Authentication
-POST /api/auth/register
-POST /api/auth/login
+✔ Lombok-powered (verified)
 
-🎓 Students
-GET    /api/students
-POST   /api/students
-PUT    /api/students/{id}
-DELETE /api/students/{id}     (ADMIN ONLY)
+@Data, @NoArgsConstructor, @AllArgsConstructor
+→ All getters, setters, constructors, toString auto-generated.
 
-👨‍🏫 Teachers
-GET    /api/teachers
-PUT    /api/teachers/{id}     (ADMIN or TEACHER OWNER)
-POST   /api/teachers/{id}/grades
+✔ Success model:
+public static <T> ApiResponse<T> success(String message, T data)
 
-🛠️ Technologies Used
-Tech	Description
-Spring Boot	Backend foundation
-Spring MVC	Controllers & routing
-Spring Security + JWT	Authorization & authentication
-JPA / Hibernate	ORM & DB operations
-Lombok	Eliminates boilerplate
-PostgreSQL	Production DB
+✔ Failure model:
+public static <T> ApiResponse<T> failure(String message, List<String> errors)
+
+✔ How controllers use it (example):
+return ResponseEntity.ok(ApiResponse.success("Student created", dto));
+
+✔ How your exception handler uses it (example):
+return ResponseEntity.badRequest().body(
+    ApiResponse.failure("Validation failed", List.of(e.getMessage()))
+);
+
+
+This makes the project extremely readable, standardized, and API-friendly.
+
+🔐 Security (JWT)
+
+Your project uses:
+
+Custom JWT authentication
+
+Role-based authorization
+
+Secure password hashing
+
+Token validation filters
+
+Restricted endpoints
+
+Public-only registration/login
+
+Admins have full privileges; teachers & students have restricted action-based permissions.
+
+📁 Project Technologies
+Technology	Purpose
+Spring Boot	Main framework
+Spring MVC	Controller layer
+Spring Data JPA	Database ORM
+PostgreSQL	Database
 Flyway	Database migrations
+Lombok	Reduce boilerplate
+JWT	Security & authentication
+DTO Mapping	Data filtering
+Custom Exceptions	Clear error messaging
 Postman	API testing
-Maven	Build & dependencies
-🧭 Future Improvements
+📌 Summary
 
-Swagger/OpenAPI documentation
+This project is a fully functional school management backend system featuring:
 
-Docker blueprint
+Proper layered architecture
 
-Pagination & filtering
+Clean DTO design
 
-Extended role management
+Exception-safe code
 
-Email notifications
+Unified API responses
+
+Strong JWT security
+
+Fully working database layer
+
+200+ rows tested
+
+Postman-verified endpoints
+
+Admin/Teacher/Student roles
