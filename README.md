@@ -72,27 +72,34 @@ Error readability
 
 Client-side integration
 
-✔ Example APIResponse format:
+## 📬 API Response Format — `APIResponse<T>`
+
+All controller endpoints return a unified response using a generic `APIResponse<T>` wrapper for consistent client handling.
+
+**Example JSON**:
+```json
 {
   "success": true,
   "message": "Student created successfully",
   "data": {
     "id": 12,
-    "name": "John Doe"
+    "firstName": "John",
+    "lastName": "Doe"
   },
   "timestamp": "2025-01-22T15:01:32"
 }
+Fields
 
+success (boolean) — operation status.
 
-Features in APIResponse:
+message (String) — human-friendly message (used also in exceptions).
 
-success boolean
+data (generic) — requested payload or null for no-data responses.
 
-message field for user-friendly explanation
+timestamp (ISO datetime) — server time for easier debugging.
 
-generic data object
-
-timestamp for debugging
+Usage
+Controllers return ResponseEntity<APIResponse<YourDto>> so clients always receive the same JSON shape.
 
 ❗ Custom Exception System
 
